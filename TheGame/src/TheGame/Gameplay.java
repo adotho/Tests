@@ -3,24 +3,23 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7829820332938518749L;
-	static int level= 1;
+	static int level= 1; // game level
 	private boolean play= false;
-	private int shipX=50;
-	private int shipY=700;
+	private int shipX=40; // X position of the spaceship
+	private int shipY=700; // Y position of the spaceship
 	private Timer timer;
 	private int delay = 8;
 	Meteors meteors = new Meteors();
@@ -33,7 +32,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		timer = new Timer (delay, this);
 		timer.start();
 	}
-
+	
+	// the game is drawn
 	public void paint(Graphics g) {
 		//black background
 		g.setColor(Color.black);
@@ -42,7 +42,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		//make it starry
 		starbackground.drawstars((Graphics2D) g);
 
-		//Level
+		//display Level
 		g.setColor(Color.WHITE);
 		g.setFont(new Font ("serif", Font.BOLD, 40));
 		g.drawString("Level: " + level, 30, 40);
@@ -61,38 +61,35 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		//for loop in which each meteors position is compared with the spaceship's
 		for (int i =0; i<meteors.metXY.length; i++) {
 			for (int k=0; k<meteors.metXY[i].length; k+=2 ) {
-				if (new Rectangle(shipX, shipY, 30, 50).intersects(new Rectangle(meteors.metXY[i][k], meteors.metXY[i][k+1],30,30))) {
-					
+				if (new Rectangle(shipX, shipY, 25, 45).intersects(new Rectangle(meteors.metXY[i][k], meteors.metXY[i][k+1],30,30))) {
 					// if their position is the same, game over
 					g.setColor(Color.RED);
 					g.setFont(new Font ("serif", Font.BOLD, 60));
 					g.drawString("Game Over!", 550, 400);
 					g.setFont(new Font ("serif", Font.PLAIN, 40));
 					g.drawString("Press Enter to restart", 525, 480);
-					shipX=50;
+					shipX=40;
 					shipY=700;
 					level=1;
-					meteors = new Meteors();
-					play=false;
-					timer.stop();
-					
+					timer.stop();			
+					play=false;	
 				}
 			}
 		}
 		//if statement to check if spaceship reaches the moon
-		if (new Rectangle(shipX, shipY, 30, 50).intersects(new Rectangle(1200, 70, 100, 100))) {
-			//if you win level 6, then you win the game!
-			if (level>2) {
-				play=false;
+		if (new Rectangle(shipX, shipY, 30, 50).intersects(new Rectangle(1220, 70, 100, 100))) {
+			//6 levels to reach the moon
+			if (level>6) {
 				g.setColor(Color.black);
 				g.fillRect(1,1, Main.fX, Main.fY);
 				g.setColor(Color.LIGHT_GRAY);
 				g.setFont(new Font ("serif", Font.BOLD, 60));
 				g.drawString("You reached the moon!", 450, 400);
 				timer.stop();
+				play=false;
 			} 
 			// if level<=6, then the spaceship returns to starting position and level increases.
-			shipX=50;
+			shipX=40;
 			shipY=700;
 			level++;
 			meteors = new Meteors();
@@ -120,7 +117,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 						meteors.metXY[i][k]+=5;
 					}
 				}
-			}		
+			}
 	repaint();
 	}
 
@@ -129,26 +126,22 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	}
 
 	@Override
-	// avoid spaceship going out of bounds && movement configuration
+	// avoid spaceship going out of frame bounds && movement configuration
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-		//	if (play==false) {
-			level=1;
-			timer.restart();
-			shipX=50;
-			shipY=700;
-			play=true;
-		//}
+				timer.restart();
+				play=true;
+				meteors= new Meteors();
 	}
 		if (e.getKeyCode()==KeyEvent.VK_RIGHT) {
-			if (shipX >= 1450) {
-				shipX = 1450;
+			if (shipX >= Main.fX-50) {
+				shipX = Main.fX-50;
 			}
 			else moveRight();
 		}
 		if (e.getKeyCode()==KeyEvent.VK_LEFT) {
-			if (shipX <= 10) {
-				shipX = 10;
+			if (shipX <= 0) {
+				shipX = 0;
 			}
 			else moveLeft();
 		}
@@ -159,8 +152,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			else moveUp();
 		}
 		if (e.getKeyCode()==KeyEvent.VK_DOWN) {
-			if (shipY >= Main.fX) {
-				shipY = Main.fX;
+			if (shipY >= Main.fY) {
+				shipY = Main.fY;
 			}
 			else moveDown();
 		}

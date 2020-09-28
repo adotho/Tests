@@ -7,9 +7,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Meteors {
 	private int wh = 40;
 
-	//method that generates number between 20 and 1480, which is the Frame width
+	//method that generates number between 60 and 1480, which is the Frame width
 	public int ranX() {
-		return ThreadLocalRandom.current().nextInt(20, 1480);
+		return ThreadLocalRandom.current().nextInt(60, 1480);
 	}
 
 	//method that generates number between 20 and 780, which is the Frame height
@@ -30,13 +30,6 @@ public class Meteors {
 		return array;
 	}
 	
-	// A 2d Array with random X and Y  values. Even positions are X and positions are Y
-	/* int [] [] metXY = {{ranX(),ranY(),ranX(),ranY(),ranX(),ranY(),ranX(),ranY()},
-			 			{ranX(),ranY(),ranX(),ranY(),ranX(),ranY(),ranX(),ranY()},
-			 			{ranX(),ranY(),ranX(),ranY(),ranX(),ranY(),ranX(),ranY()},
-			 			{ranX(),ranY(),ranX(),ranY(),ranX(),ranY(),ranX(),ranY()},
-			 			{ranX(),ranY(),ranX(),ranY(),ranX(),ranY(),ranX(),ranY()},
-			 			{ranX(),ranY(),ranX(),ranY(),ranX(),ranY(),ranX(),ranY()}}; */
 	int [][] metXY= meteorDimension(5);
 
 	// Loop that generates meteors. i= x position and i+1= y position
