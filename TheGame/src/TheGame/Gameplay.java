@@ -128,7 +128,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	@Override
 	// avoid spaceship going out of frame bounds && movement configuration
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+		if (e.getKeyCode()==KeyEvent.VK_ENTER && play == false) {
 				timer.restart();
 				play=true;
 				meteors= new Meteors();
