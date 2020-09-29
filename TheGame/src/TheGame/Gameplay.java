@@ -15,11 +15,18 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener{
-
+	
 	static int level= 1; // game level
+	public static int getLevel() {
+		return level;
+	}
 	private boolean play= false;
-	private int shipX=40; // X position of the spaceship
-	private int shipY=700; // Y position of the spaceship
+	private final int shipStartingX=40; // X position of the spaceship
+	private final int shipStartingY=700; // Y position of the spaceship
+	private int shipX=shipStartingX;
+	private int shipY=shipStartingY; 
+	private final static int shipWidth=30 ;
+	private final static int shipHeight=50 ;
 	private Timer timer;
 	private int delay = 8;
 	Meteors meteors = new Meteors();
@@ -35,8 +42,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	
 	// the game is drawn
 	public void paint(Graphics g) {
-		
-		
+				
 		//black background
 		g.setColor(Color.black);
 		g.fillRect(0,0, Main.frameX,Main.frameY);
@@ -64,20 +70,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		
 		//spaceship
 		g.setColor(Color.gray);
-		g.fillRoundRect(shipX, shipY, 30, 50, 10, 10);
+		g.fillRect(shipX, shipY, shipWidth, shipHeight);
 		
 		//for loop in which each meteors position is compared with the spaceship's
-		for (int i =0; i<meteors.metXY.length; i++) {
-			for (int k=0; k<meteors.metXY[i].length; k+=2 ) {
-				if (new Rectangle(shipX, shipY, 25, 45).intersects(new Rectangle(meteors.metXY[i][k], meteors.metXY[i][k+1],30,30))) {
+		for (int i =0; i<meteors.allMeteors.length; i++) {
+			for (int k=0; k<meteors.allMeteors[i].length; k+=2 ) {
+				if (new Rectangle(shipX, shipY, 25, 45).intersects(new Rectangle(meteors.allMeteors[i][k], meteors.allMeteors[i][k+1],30,30))) {
 					// if their position is the same, game over
 					g.setColor(Color.RED);
 					g.setFont(new Font ("serif", Font.BOLD, 60));
 					g.drawString("Game Over!", 550, 400);
 					g.setFont(new Font ("serif", Font.PLAIN, 40));
 					g.drawString("Press Enter to restart", 525, 480);
-					shipX=40;
-					shipY=700;
+					shipX=shipStartingX;
+					shipY=shipStartingY;
 					level=1;
 					timer.stop();			
 					play=false;	
@@ -116,13 +122,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			else shipY++;
 		
 		//make meteors fall (if statement checks if they have fallen. If yes, they return to the top)
-			for (int i =0; i<meteors.metXY.length; i++) {
-				for (int k=0; k<meteors.metXY[i].length; k++ )
+			for (int i =0; i<meteors.allMeteors.length; i++) {
+				for (int k=0; k<meteors.allMeteors[i].length; k++ )
 					if (k%2!=0) {
-						if (meteors.metXY[i][k]>780) {
-						meteors.metXY[i][k]=0;
+						if (meteors.allMeteors[i][k]>780) {
+						meteors.allMeteors[i][k]=0;
 						}
-						meteors.metXY[i][k]+=5;
+						meteors.allMeteors[i][k]+=5;
 					}
 				}
 			}
