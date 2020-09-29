@@ -28,6 +28,12 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	private int shipX=shipStartingX;
 	private int shipY=shipStartingY; 
 	private final static int shipWidth=30 ;
+	public static int getShipwidth() {
+		return shipWidth;
+	}
+	public int getShipStartingX() {
+		return shipStartingX;
+	}
 	private final static int shipHeight=50 ;
 	private Timer timer;
 	private int delay = 8;
@@ -51,15 +57,15 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		g.setColor(Color.black);
 		g.fillRect(0,0, Main.frameX,Main.frameY);
 		
+		//make it starry
+		starbackground.drawstars((Graphics2D) g);
+		
 		if (play==false) {
 			g.setColor(Color.RED);
 			g.setFont(new Font ("serif", Font.PLAIN, 40));
 			g.drawString("Press Enter to fly to the moon", 525, 480);
 		}
 		
-		//make it starry
-		starbackground.drawstars((Graphics2D) g);
-
 		//display Level
 		g.setColor(Color.WHITE);
 		g.setFont(new Font ("serif", Font.BOLD, 40));
@@ -76,24 +82,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		g.setColor(Color.gray);
 		g.fillRect(shipX, shipY, shipWidth, shipHeight);
 		
-		//for loop in which each meteors position is compared with the spaceship's
-		for (int i =0; i<meteors.allMeteors.length; i++) {
-			for (int k=0; k<meteors.allMeteors[i].length; k+=2 ) {
-				if (new Rectangle(shipX, shipY, 25, 45).intersects(new Rectangle(meteors.allMeteors[i][k], meteors.allMeteors[i][k+1],30,30))) {
-					// if their position is the same, game over
-					g.setColor(Color.RED);
-					g.setFont(new Font ("serif", Font.BOLD, 60));
-					g.drawString("Game Over!", 550, 400);
-					g.setFont(new Font ("serif", Font.PLAIN, 40));
-					g.drawString("Press Enter to restart", 525, 480);
-					shipX=shipStartingX;
-					shipY=shipStartingY;
-					level=1;
-					timer.stop();			
-					play=false;	
-				}
-			}
+		if (detectMeteorCollision()) {
+			// if their position is the same, game over
+			g.setColor(Color.RED);
+			g.setFont(new Font ("serif", Font.BOLD, 60));
+			g.drawString("Game Over!", 550, 400);
+			g.setFont(new Font ("serif", Font.PLAIN, 40));
+			g.drawString("Press Enter to restart", 525, 480);
+			shipX=shipStartingX;
+			shipY=shipStartingY;
+			level=1;
+			timer.stop();			
+			play=false;	
 		}
+				
 		//if statement to check if spaceship reaches the moon
 		if (new Rectangle(shipX, shipY, 30, 50).intersects(new Rectangle(1220, 70, 100, 100))) {
 			//6 levels to reach the moon
@@ -113,6 +115,18 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			meteors = new Meteors();
 		}
 		g.dispose();
+	}
+	
+	private boolean detectMeteorCollision() {
+	//for loop in which each meteors position is compared with the spaceship's
+		for (int i =0; i<meteors.allMeteors.length; i++) {
+			for (int k=0; k<meteors.allMeteors[i].length; k+=2 ) {
+				if (new Rectangle(shipX, shipY, 25, 45).intersects(new Rectangle(meteors.allMeteors[i][k], meteors.allMeteors[i][k+1],30,30))) {
+					return true;
+				}
+			}
+		}
+	return false;
 	}
 	
 	@Override
