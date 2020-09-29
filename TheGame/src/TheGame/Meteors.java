@@ -9,7 +9,7 @@ public class Meteors {
 
 	//method that generates number between 60 and 1480, which is the Frame width
 	public int ranX() {
-		return ThreadLocalRandom.current().nextInt(60, 1480);
+		return ThreadLocalRandom.current().nextInt(70, 1480);
 	}
 
 	//method that generates number between 20 and 780, which is the Frame height

@@ -35,9 +35,17 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	
 	// the game is drawn
 	public void paint(Graphics g) {
+		
+		
 		//black background
 		g.setColor(Color.black);
-		g.fillRect(1,1, Main.fX,Main.fY);
+		g.fillRect(0,0, Main.frameX,Main.frameY);
+		
+		if (play==false) {
+			g.setColor(Color.RED);
+			g.setFont(new Font ("serif", Font.PLAIN, 40));
+			g.drawString("Press Enter to fly to the moon", 525, 480);
+		}
 		
 		//make it starry
 		starbackground.drawstars((Graphics2D) g);
@@ -81,7 +89,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			//6 levels to reach the moon
 			if (level>6) {
 				g.setColor(Color.black);
-				g.fillRect(1,1, Main.fX, Main.fY);
+				g.fillRect(1,1, Main.frameX, Main.frameY);
 				g.setColor(Color.LIGHT_GRAY);
 				g.setFont(new Font ("serif", Font.BOLD, 60));
 				g.drawString("You reached the moon!", 450, 400);
@@ -128,52 +136,59 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	@Override
 	// avoid spaceship going out of frame bounds && movement configuration
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-				timer.restart();
-				play=true;
-				meteors= new Meteors();
+		if (e.getKeyCode()==KeyEvent.VK_ENTER && play==false) {
+			timer.restart();
+			play=true;
+			meteors= new Meteors();
+		}
+		if(play)  {
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_RIGHT : {
+					if (shipX >= Main.frameX-50) {
+						shipX = Main.frameX-50;
+					}
+					else moveRight();
+				break;	
+			}
+			case KeyEvent.VK_LEFT : {
+				if (shipX <= 0) {
+					shipX = 0;
+					}
+				else moveLeft();
+				break;
+			}
+			case KeyEvent.VK_UP : {
+				if (shipY <= 0) {
+					shipY = 0;
+				}
+				else moveUp();
+			break;
+			}
+			case KeyEvent.VK_DOWN : {
+					if (shipY >= Main.frameY) {
+						shipY = Main.frameY;
+					}
+					else moveDown();
+					break;
+				}
+			}
 	}
-		if (e.getKeyCode()==KeyEvent.VK_RIGHT) {
-			if (shipX >= Main.fX-50) {
-				shipX = Main.fX-50;
-			}
-			else moveRight();
-		}
-		if (e.getKeyCode()==KeyEvent.VK_LEFT) {
-			if (shipX <= 0) {
-				shipX = 0;
-			}
-			else moveLeft();
-		}
-		if (e.getKeyCode()==KeyEvent.VK_UP) {
-			if (shipY <= 0) {
-				shipY = 0;
-			 }
-			else moveUp();
-		}
-		if (e.getKeyCode()==KeyEvent.VK_DOWN) {
-			if (shipY >= Main.fY) {
-				shipY = Main.fY;
-			}
-			else moveDown();
-		}
 	}
 	
 	//movement methods
 	public void moveRight() {
-		if	(play=true) shipX+=20;
+		if	(play==true) shipX+=20;
 	}
 	public void moveLeft() {
-		if	(play=true) shipX-=20;
+		if	(play==true) shipX-=20;
 	}
 	public void moveUp() {
-		if	(play=true) shipY-=20;
+		if	(play==true) shipY-=20;
 	}
 	public void moveDown() {
-		if	(play=true) shipY+=20;
+		if	(play==true) shipY+=20;
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {	
 	}
-
 }
