@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -20,6 +21,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	public static int getLevel() {
 		return level;
 	}
+	private final ArrayList<Integer> pressedKeys;   // List of pressed Keys for as long as they are pressed. Used in keyPressed()
 	private boolean play= false;
 	private final int shipStartingX=40; // X position of the spaceship
 	private final int shipStartingY=700; // Y position of the spaceship
@@ -31,8 +33,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	private int delay = 8;
 	Meteors meteors = new Meteors();
 	StarryBackground starbackground = new StarryBackground();
+	 
 	
 	public Gameplay() {
+		pressedKeys = new ArrayList<>();
 		addKeyListener (this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
@@ -148,37 +152,40 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			meteors= new Meteors();
 		}
 		if(play)  {
-			switch (e.getKeyCode()) {
-			case KeyEvent.VK_RIGHT : {
-					if (shipX >= Main.frameX-50) {
-						shipX = Main.frameX-50;
-					}
-					else moveRight();
-				break;	
-			}
-			case KeyEvent.VK_LEFT : {
-				if (shipX <= 0) {
-					shipX = 0;
-					}
-				else moveLeft();
-				break;
-			}
-			case KeyEvent.VK_UP : {
-				if (shipY <= 0) {
-					shipY = 0;
+	        if(!pressedKeys.contains((e.getKeyCode()))){
+	            pressedKeys.add(e.getKeyCode());
+	        }
+	        if(pressedKeys.contains(KeyEvent.VK_RIGHT) ){
+				if (shipX >= Main.frameX-50) {
+					shipX = Main.frameX-50;
 				}
-				else moveUp();
-			break;
-			}
-			case KeyEvent.VK_DOWN : {
-					if (shipY >= Main.frameY) {
-						shipY = Main.frameY;
-					}
-					else moveDown();
-					break;
+				else moveRight();
+	        }
+	        if(pressedKeys.contains(KeyEvent.VK_LEFT)){
+	    		if (shipX <= 0) {
+	    			shipX = 0;
+	    			}
+	    		else moveLeft();
+	  
+	        }
+	        if(pressedKeys.contains(KeyEvent.VK_UP)){
+	    		if (shipY <= 0) {
+	    			shipY = 0;
+	    		}
+	    		else moveUp();
+	        }
+	        if(pressedKeys.contains(KeyEvent.VK_DOWN)){
+				if (shipY >= Main.frameY) {
+					shipY = Main.frameY;
 				}
-			}
+				else moveDown();
+	        }	       	       
+	    }
 	}
+	
+	@Override
+	public void keyReleased(KeyEvent e) {
+		pressedKeys.remove(Integer.valueOf(e.getKeyCode()));
 	}
 	
 	//movement methods
@@ -194,7 +201,5 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	public void moveDown() {
 		if	(play==true) shipY+=20;
 	}
-	@Override
-	public void keyReleased(KeyEvent e) {	
-	}
+
 }
