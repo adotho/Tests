@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -38,8 +39,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	private Timer timer;
 	private int delay = 8;
 	Meteors meteors = new Meteors();
-	StarryBackground starbackground = new StarryBackground();
-	 
+	//StarryBackground starbackground = new StarryBackground();
+	FallingStars fallingStars =  new FallingStars();
+	
 	public Gameplay() {
 		pressedKeys = new ArrayList<>();
 		addKeyListener (this);
@@ -57,7 +59,15 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		g.fillRect(0,0, Main.getFrameX(),Main.getFrameY());
 		
 		//make it starry
-		starbackground.drawstars((Graphics2D) g);
+		//starbackground.drawstars((Graphics2D) g);
+		fallingStars.drawClusterofObjects ((Graphics2D) g, Color.white, fallingStars.fallingStarsPositions, fallingStars.sizeX, fallingStars.sizeY);
+		
+		/* g.setColor(Color.WHITE);
+		for (int j=0; j<fallingStars.fallingStarsPositions.length; j++) {
+			for (int i=0; i<fallingStars.fallingStarsPositions[j].length-1; i+=2) {
+				g.fillRect(fallingStars.fallingStarsPositions[j][i], fallingStars.fallingStarsPositions[j][i+1], 2, 3);
+			}
+		} */
 		
 		if (play==false) {
 			g.setColor(Color.RED);
@@ -156,7 +166,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 								meteors.setAllMeteors(temporaryMeteorPositions);
 							}
 					}
-				}	
+				}
+				fallingStars.spaceObjectFalls(fallingStars.fallingStarsPositions, 1);
 	}
 	repaint();
 	}
@@ -211,16 +222,16 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	
 	//movement methods
 	public void moveRight() {
-		if	(play==true) shipX+=20;
+		if	(play==true) shipX+=15;
 	}
 	public void moveLeft() {
-		if	(play==true) shipX-=20;
+		if	(play==true) shipX-=15;
 	}
 	public void moveUp() {
-		if	(play==true) shipY-=20;
+		if	(play==true) shipY-=15;
 	}
 	public void moveDown() {
-		if	(play==true) shipY+=20;
+		if	(play==true) shipY+=15;
 	}
 
 }
