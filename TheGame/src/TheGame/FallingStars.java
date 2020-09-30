@@ -10,9 +10,6 @@ public class FallingStars extends SpaceObject{
 	int sizeY= 8;
 	int gapX= 50;
 	int gapY= 50;
-
 	int fallingStarsPositions[][]= createCluster( Main.getFrameY()/this.gapY, Main.getFrameX()/this.gapX, this.gapY, this.gapX);
-	
-
 }
 

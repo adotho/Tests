@@ -58,16 +58,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		g.setColor(Color.black);
 		g.fillRect(0,0, Main.getFrameX(),Main.getFrameY());
 		
-		//make it starry
 		//starbackground.drawstars((Graphics2D) g);
 		fallingStars.drawClusterofObjects ((Graphics2D) g, Color.white, fallingStars.fallingStarsPositions, fallingStars.sizeX, fallingStars.sizeY);
 		
-		/* g.setColor(Color.WHITE);
-		for (int j=0; j<fallingStars.fallingStarsPositions.length; j++) {
-			for (int i=0; i<fallingStars.fallingStarsPositions[j].length-1; i+=2) {
-				g.fillRect(fallingStars.fallingStarsPositions[j][i], fallingStars.fallingStarsPositions[j][i+1], 2, 3);
-			}
-		} */
 		
 		if (play==false) {
 			g.setColor(Color.RED);
@@ -85,7 +78,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		g.fillOval(1200, 70, 150, 150);
 		
 		 //meteors   
-		meteors.drawMeteors((Graphics2D) g);
+		//meteors.drawMeteors((Graphics2D) g);
+		meteors.drawClusterofObjects((Graphics2D) g, Color.red, meteors.getAllMeteors(), meteors.getSize(), meteors.getSize() );
 		
 		//spaceship
 		g.setColor(Color.gray);
@@ -140,7 +134,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	
 	private boolean detectMoonLanding() {
 		return
-		new Rectangle(shipX, shipY, 30, 50).intersects(new Rectangle(1220, 70, 100, 100));
+		new Rectangle(shipX, shipY, shipWidth, shipHeight).intersects(new Rectangle(1220, 70, 100, 100));
 	}
 	
 	@Override
@@ -148,8 +142,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		timer.start();
 		if (play) {
 		//gravity always pulls spaceship downwards. If it reaches bottom, it just stays there
-			if (shipY>=740) {
-			shipY=740;
+			if (shipY>=Main.getFrameY()-Main.getFrameBounds()-shipHeight) {
+			shipY=Main.getFrameY()-Main.getFrameBounds()-shipHeight;
 			}
 			else shipY++;
 		

@@ -24,6 +24,10 @@ public class Main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
+	public static int getFrameBounds() {
+		return FRAME_BOUNDS;
+	}
+
 	public static int getFrameX() {
 		return FRAME_X;
 	}

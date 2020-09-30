@@ -4,34 +4,21 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class SpaceObject {
-private int xPosition;
-protected int yPosition;
-/* protected int sizeX=0;
-protected int sizeY=0;
-protected int gapX=0;
-protected int gapY=0;
+	private int xPosition;
+	private int yPosition;
 
-public SpaceObject (int a, int b, int c,int d, int e, int f) {
-a= xPosition;
-b= yPosition;
-c= sizeX;
-d= sizeY;
-e= gapX;
-f= gapY;
-} */
-
-	protected int [][] createCluster(int x, int y, int gapX, int gapY){
-	int clusterOfSpaceObjects[][]= new int [x][y];
-		for (int i=0; i< x; i++) {
-			for (int j=0; j<y; j++) {
-				if (j%2==0)clusterOfSpaceObjects [i][j]=xPosition;
-				else clusterOfSpaceObjects[i][j]=yPosition;
-				xPosition+= gapX;
+		protected int [][] createCluster(int x, int y, int gapX, int gapY){
+			int clusterOfSpaceObjects[][]= new int [x][y];
+				for (int i=0; i< x; i++) {
+					for (int j=0; j<y; j++) {
+						if (j%2==0)clusterOfSpaceObjects [i][j]=xPosition;
+						else clusterOfSpaceObjects[i][j]=yPosition;
+						xPosition+= gapX;
+					}
+				if (i%2==0) xPosition=10;
+				else xPosition=50;	
+				yPosition+=gapY;
 			}
-			if (i%2==0) xPosition=10;
-			else xPosition=50;	
-		yPosition+=gapY;
-		}
 		return clusterOfSpaceObjects;
 	}
 	public void drawClusterofObjects (Graphics2D c, Color color, int [][] clusterOfSpaceObjects, int width, int height) {
