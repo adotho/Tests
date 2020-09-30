@@ -17,7 +17,7 @@ import javax.swing.Timer;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	
-	static int level= 1; // game level
+	private static int level= 1; // game level
 	public static int getLevel() {
 		return level;
 	}
@@ -40,7 +40,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	Meteors meteors = new Meteors();
 	StarryBackground starbackground = new StarryBackground();
 	 
-	
 	public Gameplay() {
 		pressedKeys = new ArrayList<>();
 		addKeyListener (this);
@@ -55,7 +54,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 				
 		//black background
 		g.setColor(Color.black);
-		g.fillRect(0,0, Main.frameX,Main.frameY);
+		g.fillRect(0,0, Main.getFrameX(),Main.getFrameY());
 		
 		//make it starry
 		starbackground.drawstars((Graphics2D) g);
@@ -97,11 +96,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		}
 				
 		//if statement to check if spaceship reaches the moon
-		if (new Rectangle(shipX, shipY, 30, 50).intersects(new Rectangle(1220, 70, 100, 100))) {
+		if (detectMoonLanding()) {
 			//6 levels to reach the moon
 			if (level>6) {
 				g.setColor(Color.black);
-				g.fillRect(1,1, Main.frameX, Main.frameY);
+				g.fillRect(0,0, Main.getFrameX(), Main.getFrameY());
 				g.setColor(Color.LIGHT_GRAY);
 				g.setFont(new Font ("serif", Font.BOLD, 60));
 				g.drawString("You reached the moon!", 450, 400);
@@ -109,8 +108,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 				play=false;
 			} 
 			// if level<=6, then the spaceship returns to starting position and level increases.
-			shipX=40;
-			shipY=700;
+			shipX=shipStartingX;
+			shipY=shipStartingY;
 			level++;
 			meteors = new Meteors();
 		}
@@ -119,14 +118,19 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	
 	private boolean detectMeteorCollision() {
 	//for loop in which each meteors position is compared with the spaceship's
-		for (int i =0; i<meteors.allMeteors.length; i++) {
-			for (int k=0; k<meteors.allMeteors[i].length; k+=2 ) {
-				if (new Rectangle(shipX, shipY, 25, 45).intersects(new Rectangle(meteors.allMeteors[i][k], meteors.allMeteors[i][k+1],30,30))) {
+		for (int i =0; i<meteors.getAllMeteors().length; i++) {
+			for (int k=0; k<meteors.getAllMeteors()[i].length; k+=2 ) {
+				if (new Rectangle(shipX, shipY, 25, 45).intersects(new Rectangle(meteors.getAllMeteors()[i][k], meteors.getAllMeteors()[i][k+1],30,30))) {
 					return true;
 				}
 			}
 		}
 	return false;
+	}
+	
+	private boolean detectMoonLanding() {
+		return
+		new Rectangle(shipX, shipY, 30, 50).intersects(new Rectangle(1220, 70, 100, 100));
 	}
 	
 	@Override
@@ -140,19 +144,22 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			else shipY++;
 		
 		//make meteors fall (if statement checks if they have fallen. If yes, they return to the top)
-			for (int i =0; i<meteors.allMeteors.length; i++) {
-				for (int k=0; k<meteors.allMeteors[i].length; k++ )
-					if (k%2!=0) {
-						if (meteors.allMeteors[i][k]>780) {
-						meteors.allMeteors[i][k]=0;
-						}
-						meteors.allMeteors[i][k]+=5;
+				for (int i =0; i<meteors.getAllMeteors().length; i++) {
+				int [][] temporaryMeteorPositions = meteors.getAllMeteors();
+					for (int k=0; k<meteors.getAllMeteors()[i].length; k++ ) {
+							if (k%2!=0) {
+								if (meteors.getAllMeteors()[i][k]>780) {
+									temporaryMeteorPositions[i][k]=0;
+									meteors.setAllMeteors(temporaryMeteorPositions);
+								}
+								temporaryMeteorPositions[i][k]+=5;
+								meteors.setAllMeteors(temporaryMeteorPositions);
+							}
 					}
-				}
-			}
+				}	
+	}
 	repaint();
 	}
-
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
@@ -170,8 +177,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	            pressedKeys.add(e.getKeyCode());
 	        }
 	        if(pressedKeys.contains(KeyEvent.VK_RIGHT) ){
-				if (shipX >= Main.frameX-50) {
-					shipX = Main.frameX-50;
+				if (shipX >= Main.getFrameX()-50) {
+					shipX = Main.getFrameX()-50;
 				}
 				else moveRight();
 	        }
@@ -189,8 +196,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	    		else moveUp();
 	        }
 	        if(pressedKeys.contains(KeyEvent.VK_DOWN)){
-				if (shipY >= Main.frameY) {
-					shipY = Main.frameY;
+				if (shipY >= Main.getFrameY()) {
+					shipY = Main.getFrameY();
 				}
 				else moveDown();
 	        }	       	       
