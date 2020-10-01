@@ -15,17 +15,25 @@ import java.util.Arrays;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+/**
+ * 
+ * @author Antonia
+ * the game panel
+ * Moon, spaceship and strings do not exist as objects and are drawn directly on the panel.
+ *	
+ */
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	
-	private static int level= 1; // game level
+	private static int level= 1; 
 	public static int getLevel() {
 		return level;
 	}
-	private final ArrayList<Integer> pressedKeys;   // List of pressed Keys for as long as they are pressed. Used in keyPressed()
+	//Array of pressed keys allows diagonal movement
+	private final ArrayList<Integer> pressedKeys;
 	private boolean play= false;
-	private static final int shipStartingX=40; // X position of the spaceship
-	private static final int shipStartingY=700; // Y position of the spaceship
+	private static final int shipStartingX=40; 
+	private static final int shipStartingY=700; 
 	private int shipX=shipStartingX;
 	private int shipY=shipStartingY; 
 	private final static int shipWidth=30 ;
@@ -40,7 +48,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		return shipHeight;
 	}
 	private Timer timer;
-	private int delay = 8;
+	private int delay = 8; // number for delay used in game tutorial. Run smoothly
 	Meteors meteors = new Meteors();
 	FallingStars fallingStars =  new FallingStars();
 	
@@ -49,17 +57,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		addKeyListener (this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
-		timer = new Timer (delay, this);
+		timer = new Timer (delay, null);
 		timer.start();
 	}
 	
 	public void paint(Graphics g) {
-				
+		
+		//background
 		g.setColor(Color.black);
 		g.fillRect(0,0, Main.getFrameX(),Main.getFrameY());
 		
+		//falling stars in background
 		fallingStars.drawClusterofObjects ((Graphics2D) g, Color.white, fallingStars.getFallingStarsArray(), fallingStars.getSizeX(), fallingStars.getSizeY(), false);
 		
+		//Starting menu
 		if (play==false) {
 			g.setColor(Color.white);
 			g.setFont(new Font ("serif", Font.PLAIN, 40));
@@ -96,7 +107,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		}
 				
 		if (detectMoonLanding()) {
-			if (level>6) {
+			if (level>5) {
 				g.setColor(Color.black);
 				g.fillRect(0,0, Main.getFrameX(), Main.getFrameY());
 				g.setColor(Color.LIGHT_GRAY);
@@ -105,7 +116,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 				timer.stop();
 				play=false;
 			} 
-			// if level<=6, then the spaceship returns to starting position and level increases.
 			shipX=shipStartingX;
 			shipY=shipStartingY;
 			level++;
@@ -113,7 +123,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		}
 		g.dispose();
 	}
-	
+	/**Compares position of spaceship with that of the meteors, using their array of X and Y positions
+	 * @return boolean
+	 * 
+	 */
 	private boolean detectMeteorCollision() {
 		for (int i =0; i<meteors.getAllMeteors().length; i++) {
 			for (int k=0; k<meteors.getAllMeteors()[i].length; k+=2 ) {
@@ -124,7 +137,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		}
 	return false;
 	}
-	
+	/**
+	 * Compares position of spaceship with that of the moon
+	 * @return boolean
+	 */
 	private boolean detectMoonLanding() {
 		return
 		new Rectangle(shipX, shipY, shipWidth, shipHeight).intersects(new Rectangle(1220, 70, 100, 100));
@@ -139,7 +155,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			shipY=Main.getFrameY()-Main.getFrameBounds()-shipHeight;
 			}
 			else shipY++;
-
+		
 		meteors.spaceObjectFalls(meteors.getAllMeteors(), 5);
 		fallingStars.spaceObjectFalls(fallingStars.getFallingStarsArray(), 1);
 		}

@@ -2,8 +2,12 @@ package theGame;
 
 import javax.swing.JFrame;
 
+/**
+ * GameFrame which loads the gameplay panel
+ */
+
 public class Main {
-	// X and Y dimensions of the JFrame	
+	
 	private static final int FRAME_X=1500;
 	private static final int FRAME_Y=800;
 	private static final int FRAME_BOUNDS=10;
