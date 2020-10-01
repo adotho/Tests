@@ -1,4 +1,4 @@
-package TheGame;
+package theGame;
 
 import javax.swing.JFrame;
 
@@ -14,7 +14,7 @@ public class Main {
 		frame.setBounds(FRAME_BOUNDS,FRAME_BOUNDS,FRAME_X,FRAME_Y);
 		frame.setTitle(GAME_NAME);
 		
-		// Gameplay panel is instantiated and added to JFrame
+	
 		Gameplay gameplay = new Gameplay();
 		frame.add(gameplay);
 		

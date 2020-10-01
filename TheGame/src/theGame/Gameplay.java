@@ -1,4 +1,4 @@
-package TheGame;
+package theGame;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -24,22 +24,24 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	}
 	private final ArrayList<Integer> pressedKeys;   // List of pressed Keys for as long as they are pressed. Used in keyPressed()
 	private boolean play= false;
-	private final int shipStartingX=40; // X position of the spaceship
-	private final int shipStartingY=700; // Y position of the spaceship
+	private static final int shipStartingX=40; // X position of the spaceship
+	private static final int shipStartingY=700; // Y position of the spaceship
 	private int shipX=shipStartingX;
 	private int shipY=shipStartingY; 
 	private final static int shipWidth=30 ;
 	public static int getShipwidth() {
 		return shipWidth;
 	}
-	public int getShipStartingX() {
+	public static int getShipStartingX() {
 		return shipStartingX;
 	}
 	private final static int shipHeight=50 ;
+	public static int getShipheight() {
+		return shipHeight;
+	}
 	private Timer timer;
 	private int delay = 8;
 	Meteors meteors = new Meteors();
-	//StarryBackground starbackground = new StarryBackground();
 	FallingStars fallingStars =  new FallingStars();
 	
 	public Gameplay() {
@@ -51,21 +53,17 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		timer.start();
 	}
 	
-	// the game is drawn
 	public void paint(Graphics g) {
 				
-		//black background
 		g.setColor(Color.black);
 		g.fillRect(0,0, Main.getFrameX(),Main.getFrameY());
 		
-		//starbackground.drawstars((Graphics2D) g);
-		fallingStars.drawClusterofObjects ((Graphics2D) g, Color.white, fallingStars.fallingStarsPositions, fallingStars.sizeX, fallingStars.sizeY);
-		
+		fallingStars.drawClusterofObjects ((Graphics2D) g, Color.white, fallingStars.getFallingStarsArray(), fallingStars.getSizeX(), fallingStars.getSizeY(), false);
 		
 		if (play==false) {
-			g.setColor(Color.RED);
+			g.setColor(Color.white);
 			g.setFont(new Font ("serif", Font.PLAIN, 40));
-			g.drawString("Press Enter to fly to the moon", 525, 480);
+			g.drawString("Press Enter to fly to the moon", 520, 450);
 		}
 		
 		//display Level
@@ -77,16 +75,14 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillOval(1200, 70, 150, 150);
 		
-		 //meteors   
-		//meteors.drawMeteors((Graphics2D) g);
-		meteors.drawClusterofObjects((Graphics2D) g, Color.red, meteors.getAllMeteors(), meteors.getSize(), meteors.getSize() );
+		//meteors   
+		meteors.drawClusterofObjects((Graphics2D) g, Color.red, meteors.getAllMeteors(), meteors.getSize(), meteors.getSize(), false );
 		
 		//spaceship
 		g.setColor(Color.gray);
 		g.fillRect(shipX, shipY, shipWidth, shipHeight);
 		
 		if (detectMeteorCollision()) {
-			// if their position is the same, game over
 			g.setColor(Color.RED);
 			g.setFont(new Font ("serif", Font.BOLD, 60));
 			g.drawString("Game Over!", 550, 400);
@@ -99,9 +95,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			play=false;	
 		}
 				
-		//if statement to check if spaceship reaches the moon
 		if (detectMoonLanding()) {
-			//6 levels to reach the moon
 			if (level>6) {
 				g.setColor(Color.black);
 				g.fillRect(0,0, Main.getFrameX(), Main.getFrameY());
@@ -121,7 +115,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	}
 	
 	private boolean detectMeteorCollision() {
-	//for loop in which each meteors position is compared with the spaceship's
 		for (int i =0; i<meteors.getAllMeteors().length; i++) {
 			for (int k=0; k<meteors.getAllMeteors()[i].length; k+=2 ) {
 				if (new Rectangle(shipX, shipY, 25, 45).intersects(new Rectangle(meteors.getAllMeteors()[i][k], meteors.getAllMeteors()[i][k+1],30,30))) {
@@ -146,23 +139,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			shipY=Main.getFrameY()-Main.getFrameBounds()-shipHeight;
 			}
 			else shipY++;
-		
-		//make meteors fall (if statement checks if they have fallen. If yes, they return to the top)
-				for (int i =0; i<meteors.getAllMeteors().length; i++) {
-				int [][] temporaryMeteorPositions = meteors.getAllMeteors();
-					for (int k=0; k<meteors.getAllMeteors()[i].length; k++ ) {
-							if (k%2!=0) {
-								if (meteors.getAllMeteors()[i][k]>780) {
-									temporaryMeteorPositions[i][k]=0;
-									meteors.setAllMeteors(temporaryMeteorPositions);
-								}
-								temporaryMeteorPositions[i][k]+=5;
-								meteors.setAllMeteors(temporaryMeteorPositions);
-							}
-					}
-				}
-				fallingStars.spaceObjectFalls(fallingStars.fallingStarsPositions, 1);
-	}
+
+		meteors.spaceObjectFalls(meteors.getAllMeteors(), 5);
+		fallingStars.spaceObjectFalls(fallingStars.getFallingStarsArray(), 1);
+		}
 	repaint();
 	}
 	@Override
@@ -215,16 +195,16 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	}
 	
 	//movement methods
-	public void moveRight() {
+	private void moveRight() {
 		if	(play==true) shipX+=15;
 	}
-	public void moveLeft() {
+	private void moveLeft() {
 		if	(play==true) shipX-=15;
 	}
-	public void moveUp() {
+	private void moveUp() {
 		if	(play==true) shipY-=15;
 	}
-	public void moveDown() {
+	private void moveDown() {
 		if	(play==true) shipY+=15;
 	}
 
