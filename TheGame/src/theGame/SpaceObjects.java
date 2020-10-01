@@ -11,7 +11,7 @@ import java.util.Random;
  * * @author Antonia
  *
  */
-abstract class SpaceObjects {
+ abstract class SpaceObjects {
 /**
  * Creates 2D array with XY values for ordered Space objects 
  * @param x = array length
@@ -27,12 +27,13 @@ abstract class SpaceObjects {
 		int clusterOfSpaceObjects[][]= new int [x][y];
 			for (int i=0; i< x; i++) {
 				for (int j=0; j<y; j++) {
-					if (j%2==0)clusterOfSpaceObjects [i][j]=xPosition;
+					if (j%2==0) {clusterOfSpaceObjects [i][j]=xPosition;
+					xPosition+= gapX;}
 					else clusterOfSpaceObjects[i][j]=yPosition;
-					xPosition+= gapX;
+					
 					}
 					if (i%2==0) xPosition=startingX;
-					else xPosition=startingX + gapX;	
+					else xPosition=startingX + gapX/2;	
 				yPosition+=gapY;
 			}
 		return clusterOfSpaceObjects;

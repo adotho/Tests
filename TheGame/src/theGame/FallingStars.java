@@ -8,9 +8,9 @@ public class FallingStars extends SpaceObjects{
 	private int yPosition= 5;
 	private int sizeX= 2;
 	private int sizeY= 8;
-	private int gapX= 50;
+	private int gapX= 100;
 	private int gapY= 50;
-	private int fallingStarsArray[][]= createCluster( Main.getFrameY()/gapY, Main.getFrameX()/gapX, xPosition, yPosition, gapX, gapY);
+	private int fallingStarsArray[][]= createCluster( Main.getFrameY()/gapY, Main.getFrameX()/gapX*2, xPosition, yPosition, gapX, gapY);
 	public int getxPosition() {
 		return xPosition;
 	}
