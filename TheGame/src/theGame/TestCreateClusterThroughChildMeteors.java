@@ -54,7 +54,6 @@ class TestCreateClusterThroughChildMeteors {
 		int [][] createdCluster = meteors.createCluster(10, 10, 6, 5, 4, 3);
 		assertTrue( createdCluster[1][1]==8);
 	}
-	
 }
 
 
