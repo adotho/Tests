@@ -3,6 +3,7 @@ package theGame;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 /**
  * methods shared by SpaceObjects.
  * They are use for objects which appear more than once
@@ -13,66 +14,68 @@ import java.util.Random;
  */
  abstract class SpaceObjects {
 /**
- * Creates 2D array with XY values for ordered Space objects 
- * @param x = array length
- * @param y = array[] length
+ * Creates 2D array with XY values for ordered zig zag Space objects 
+ * @param x = array length (number of clusters)
+ * @param y = array[] length (XYPositions of SpaceObjects).
  * @param xPosition = horizontal position in Panel
- * @param yPosition = vertical position 
- * @param gapX = X distance between SpaceObjects 
- * @param gapY = Y distance between SpaceObjects
+ * @param yPosition = vertical position in Panel
+ * @param gapX = horizontal distance between SpaceObjects 
+ * @param gapY = vertical distance between SpaceObjects
  * @return Array with XY values. Each %==0 position in array contains X position, while %!=0 have Y positions
  */
 	protected int [][] createCluster(int x, int y, int xPosition, int yPosition, int gapX, int gapY){
-		int startingX= yPosition;
+		int startingX= xPosition;
 		int clusterOfSpaceObjects[][]= new int [x][y];
 			for (int i=0; i< x; i++) {
 				for (int j=0; j<y; j++) {
-					if (j%2==0) {clusterOfSpaceObjects [i][j]=xPosition;
-					xPosition+= gapX;}
-					else clusterOfSpaceObjects[i][j]=yPosition;
-					
+					if (j%2==0) {
+						clusterOfSpaceObjects [i][j]=xPosition;
+						xPosition+= gapX;
 					}
-					if (i%2==0) xPosition=startingX;
-					else xPosition=startingX + gapX/2;	
-				yPosition+=gapY;
+					else clusterOfSpaceObjects[i][j]=yPosition;
+					}
+					if (i%2==0) xPosition=startingX + gapX/2;
+					else xPosition=startingX;
+					yPosition+=gapY;
 			}
 		return clusterOfSpaceObjects;
 	}
 	/**
-	 * Creates 2D array with XY values for randomly flying Space objects
-	 * @param x = array length
-	 * @param y =array[] length
-	 * @param size = size of the objects
-	 * @return Array with XY values. Each %==0 position in array contains X position, while %!=0 have Y positions
+	 * Returns 2D array with XY values for randomly flying Space objects
+	 * by using the methods randomXposition and randomYposition
+	 * @param x = Array.length
+	 * @param y = Array[].length
+	 * @param GapLeft distance from frame left borders
+	 * @param GapRight distance from frame right borders
+	 *  
+	 * @return 2DArray
 	 */
-	protected int [][] createCluster(int x, int y, int size){
+	protected int [][] createCluster(int x, int y, int GapLeft, int GapRight){
 		int clusterOfSpaceObjects[][]= new int [x][y];
 			for (int i=0; i< x; i++) {
 				for (int j=0; j<y; j++) {
-					if (j%2==0)clusterOfSpaceObjects [i][j]=randomXposition(size);
-					else clusterOfSpaceObjects[i][j]=randomYposition(size);
+					if (j%2==0)clusterOfSpaceObjects [i][j]=randomXposition(GapLeft, GapRight);
+					else clusterOfSpaceObjects[i][j]=randomYposition();
 				}
 		
 			}
 			return clusterOfSpaceObjects;
 	}
 	/**
-	* 	Method to generate random X position within the Gameframe
-	* @param size = the size of the object is taken into account so the object doesn't fall out of frame
-	* @return random int within a range
-	*/
-	private int randomXposition(int size) {
-		Random random = new Random();
-		return random.nextInt(Main.getFrameX() - size - Gameplay.getShipStartingX() - + 1) + size +Gameplay.getShipStartingX();
+	 * Method to generate random X position within the Gameframe
+	 * @param min Minimum Value of X
+	 * @param toBededutedFromMax Number to be deducted from Maximum, which is 1500 (the FrameWidth) 
+	 * @return random integer within a range
+	 */
+	private int randomXposition(int min, int toBededutedFromMax) {
+		return  ThreadLocalRandom.current().nextInt(0 + min, Main.getFrameX()-toBededutedFromMax);
 	}
 	/**
-	 * Method to generate random Y position within the Gameframe
-	 * @param size =the size of the object is taken into account so the object doesn't fall out of frame
-	 * @return random int within a range
+	 * Method to generate random Y position within the JPanel
+	 * @return random integer within a range
 	 */
-	private int randomYposition(int size) {
-		Random random = new Random();
-		return random.nextInt(Main.getFrameY() - size + 1) + size;
+	private int randomYposition() {
+		return  ThreadLocalRandom.current().nextInt(0, Main.getFrameY());
 	}
 	/**
 	 * Method by which the Space Objects are drawn 

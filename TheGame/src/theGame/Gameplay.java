@@ -37,6 +37,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	private int shipX=shipStartingX;
 	private int shipY=shipStartingY; 
 	private final static int shipWidth=30 ;
+	private final int moonPositionX= 1300 ;
+	private final int moonPositionY = 50 ;
+	private final int moonSize= 150;
+			
 	public static int getShipwidth() {
 		return shipWidth;
 	}
@@ -84,7 +88,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		
 		//the moon
 		g.setColor(Color.LIGHT_GRAY);
-		g.fillOval(1200, 70, 150, 150);
+		g.fillOval(moonPositionX, moonPositionY, moonSize, moonSize);
 		
 		//meteors   
 		meteors.drawClusterofObjects((Graphics2D) g, Color.red, meteors.getAllMeteors(), meteors.getSize(), meteors.getSize(), false );
@@ -130,7 +134,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	private boolean detectMeteorCollision() {
 		for (int i =0; i<meteors.getAllMeteors().length; i++) {
 			for (int k=0; k<meteors.getAllMeteors()[i].length; k+=2 ) {
-				if (new Rectangle(shipX, shipY, 25, 45).intersects(new Rectangle(meteors.getAllMeteors()[i][k], meteors.getAllMeteors()[i][k+1],30,30))) {
+				if (new Rectangle(shipX, shipY, shipWidth, shipHeight).intersects(new Rectangle(meteors.getAllMeteors()[i][k], meteors.getAllMeteors()[i][k+1],meteors.getSize()-5,meteors.getSize()-5)))
+				//	intersects method takes Rectangles as parameters. Meteors are circles, so I used trial and error with numbers to get a good result 
+				{
 					return true;
 				}
 			}
@@ -143,7 +149,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	 */
 	private boolean detectMoonLanding() {
 		return
-		new Rectangle(shipX, shipY, shipWidth, shipHeight).intersects(new Rectangle(1220, 70, 100, 100));
+		new Rectangle(shipX, shipY, shipWidth, shipHeight).intersects(new Rectangle(moonPositionX-moonSize/2, moonPositionY-moonSize/2, moonSize+50, moonSize+50));
+		//Numbers generated through trial and error, as intersects compares a rectangle with a rectangle
 	}
 	
 	@Override

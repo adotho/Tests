@@ -10,7 +10,7 @@ public class Main {
 	
 	private static final int FRAME_X=1500;
 	private static final int FRAME_Y=800;
-	private static final int FRAME_BOUNDS=10;
+	private static final int FRAME_BOUNDS=20;
 	private static final String GAME_NAME= "I 'm gonna send me to Outer Space and find another race";
 		
 	public static void main(String[] args) {

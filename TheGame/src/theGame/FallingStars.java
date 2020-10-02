@@ -10,7 +10,12 @@ public class FallingStars extends SpaceObjects{
 	private int sizeY= 8;
 	private int gapX= 100;
 	private int gapY= 50;
-	private int fallingStarsArray[][]= createCluster( Main.getFrameY()/gapY, Main.getFrameX()/gapX*2, xPosition, yPosition, gapX, gapY);
+	private int fallingStars2DArrayHeight =Main.getFrameY()/gapY+1; 
+	private int fallingStars2DArrayWidth =Main.getFrameX()/gapX*2+1; 
+	//*2 because both X and Y are stored
+	
+	private int fallingStarsArray[][]= createCluster(fallingStars2DArrayHeight, fallingStars2DArrayWidth
+			, xPosition, yPosition, gapX, gapY);
 	public int getxPosition() {
 		return xPosition;
 	}
