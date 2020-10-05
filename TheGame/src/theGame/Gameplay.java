@@ -149,7 +149,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	 */
 	private boolean detectMoonLanding() {
 		return
-		new Rectangle(shipX, shipY, shipWidth, shipHeight).intersects(new Rectangle(moonPositionX-moonSize/2, moonPositionY-moonSize/2, moonSize+50, moonSize+50));
+		new Rectangle(shipX, shipY, shipWidth, shipHeight).intersects(new Rectangle(moonPositionX-moonSize/3, moonPositionY-moonSize/2, moonSize+30, moonSize));
 		//Numbers generated through trial and error, as intersects compares a rectangle with a rectangle
 	}
 	
